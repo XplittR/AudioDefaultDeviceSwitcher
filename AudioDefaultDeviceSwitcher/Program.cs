@@ -11,7 +11,8 @@ namespace AudioDefaultDeviceSwitcher {
         }
         private const string IniFileName = "Audio.ini";
         private const string DevicesIniKey = "Devices";
-        private readonly string _iniPath = Environment.CurrentDirectory + Path.DirectorySeparatorChar + IniFileName;
+        private readonly string _iniPath = AppDomain.CurrentDomain.BaseDirectory + IniFileName;
+        private readonly string _logPath = AppDomain.CurrentDomain.BaseDirectory + "Audio.log";
 
         public void Run() {
             Initialize();
@@ -19,15 +20,13 @@ namespace AudioDefaultDeviceSwitcher {
             var devicesStr = ini.Val(DevicesIniKey);
             var devices = devicesStr.Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries);
             if (devices.Length <= 1) {
-                Console.WriteLine("Please enter more than one device-name.");
-                Console.ReadKey();
+                CreateAndWriteToFile(_logPath, "Please enter more than one device-name.");
                 Environment.Exit(0);
             }
             var activePlayback = Controller.GetPlaybackDevices(DeviceState.Active);
             var relevantDevicesArr = activePlayback.Where(o => devices.Contains(o.Name)).ToArray();
             if (relevantDevicesArr.Length <= 1) {
-                Console.WriteLine("Could not find more than one device to togglet between. Did you type the names correct?");
-                Console.ReadKey();
+                CreateAndWriteToFile(_logPath, "Could not find more than one device to togglet between. Did you type the names correct?");
                 Environment.Exit(0);
             }
             var currentDefaultDevice = relevantDevicesArr.FirstOrDefault(o => o.IsDefaultDevice);
@@ -40,13 +39,15 @@ namespace AudioDefaultDeviceSwitcher {
 
         private void Initialize() {
             if (!File.Exists(_iniPath)) {
-                using (var stream = File.CreateText(_iniPath)) {
-                    stream.WriteLine("{0}=A,B,C", DevicesIniKey);
-                }
-                Console.WriteLine("A {0} has been created for you, fill it with the playback devices you want to toggle between.", IniFileName);
-                Console.WriteLine("Path to the .ini: {0}", _iniPath);
-                Console.ReadKey();
+                CreateAndWriteToFile(_iniPath, DevicesIniKey + "=A,B,C");
+                CreateAndWriteToFile(_logPath, string.Format("A {0} has been created for you, fill it with the playback devices you want to toggle between.\r\nPath to the .ini: {1}", IniFileName, _iniPath));
                 Environment.Exit(0);
+            }
+        }
+
+        private void CreateAndWriteToFile(string filePath, string text) {
+            using (var stream = File.CreateText(filePath)) {
+                stream.WriteLine(text);
             }
         }
 
