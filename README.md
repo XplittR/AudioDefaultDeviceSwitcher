@@ -2,11 +2,12 @@
 A simple program that toggles the default audio playback device on windows.
 
 # How to use
-- Compile using Visual Studio.
-- Place the produced "AudioDefaultDeviceSwitcher.exe" in the directory you want to run it from.
-- Run "AudioDefaultDeviceSwitcher.exe". A "Audio.ini" will be created in the same directory.
-- Edit the "Audio.ini" to your devices that you want to toggle between (Separate each name with a comma).
-- Run "AudioDefaultDeviceSwitcher.exe" every time you want to toggle between the devices.
+1. Retrieve the AudioDefaultDeviceSwitcher.exe.
+  * Option 1: Compile using Visual Studio, and place the produced "AudioDefaultDeviceSwitcher.exe" in the directory you want to run it from.
+  * Option 2: Download the [latest release](https://github.com/XplittR/AudioDefaultDeviceSwitcher/releases) place the .exe in the directory you want to run it from.  
+2. Run "AudioDefaultDeviceSwitcher.exe". A "Audio.ini" will be created in the same directory.  
+3. Edit the "Audio.ini" to your devices that you want to toggle between (Separate each name with a comma).  
+4. Run "AudioDefaultDeviceSwitcher.exe" every time you want to toggle between the devices.  
 
 # Setup
 Example Audio.ini:  
@@ -15,6 +16,6 @@ Example Audio.ini:
 Corresponding Playback devices in Windows:  
 ![Devices](/DeviceImage.png?raw=true "Devices")
 
-# Todo
-- Provide a pre-compiled version of the .exe
-- Fix any reported bugs
+
+## Issues?
+If you encounter any issues, feature requests or pull requests, please do not hesitate to submit them!
