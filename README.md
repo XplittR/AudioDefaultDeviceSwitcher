@@ -9,9 +9,12 @@ A simple program that toggles the default audio playback device on windows.
 - Run "AudioDefaultDeviceSwitcher.exe" every time you want to toggle between the devices.
 
 # Setup
-
 Example Audio.ini:  
 `Devices=Speakers,Realtek HD Audio 2nd output`
 
 Corresponding Playback devices in Windows:  
 ![Devices](/DeviceImage.png?raw=true "Devices")
+
+# Todo
+- Provide a pre-compiled version of the .exe
+- Fix any reported bugs
