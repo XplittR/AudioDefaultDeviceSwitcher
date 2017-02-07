@@ -19,3 +19,7 @@ Corresponding Playback devices in Windows:
 
 ## Issues?
 If you encounter any issues, feature requests or pull requests, please do not hesitate to submit them!
+
+## Thanks
+- Thanks to [xenolightning](https://github.com/xenolightning) for creating [AudioSwitcher API](https://github.com/xenolightning/AudioSwitcher).
+- Thanks to [Fody](https://github.com/Fody) for creating [Costura.Fody](https://github.com/Fody/Costura).
