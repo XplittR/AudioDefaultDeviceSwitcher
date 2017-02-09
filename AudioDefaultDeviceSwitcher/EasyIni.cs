@@ -17,5 +17,12 @@ namespace AudioDefaultDeviceSwitcher {
                 return defaultVal;
             return set.Split('=')[1];
         }
+
+        public bool Val(string key, bool defaultVal) {
+            var set = _settings.FirstOrDefault(s => s.StartsWith(key + "=", true, CultureInfo.CurrentCulture));
+            if (string.IsNullOrWhiteSpace(set))
+                return defaultVal;
+            return bool.Parse(set.Split('=')[1]);
+        }
     }
 }

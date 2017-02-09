@@ -11,6 +11,7 @@ namespace AudioDefaultDeviceSwitcher {
         }
         private const string IniFileName = "Audio.ini";
         private const string DevicesIniKey = "Devices";
+        private const string AlsoSetCommunicationsIniKey = "AlsoSetCommunications";
         private readonly string _iniPath = AppDomain.CurrentDomain.BaseDirectory + IniFileName;
         private readonly string _logPath = AppDomain.CurrentDomain.BaseDirectory + "Audio.log";
 
@@ -35,11 +36,15 @@ namespace AudioDefaultDeviceSwitcher {
                 ? relevantDevicesArr.First()
                 : relevantDevicesArr[currentIndex + 1];
             nextDevice.SetAsDefault();
+            var alsoCommunications = ini.Val(AlsoSetCommunicationsIniKey, true);
+            if (alsoCommunications)
+                nextDevice.SetAsDefaultCommunications();
         }
 
         private void Initialize() {
             if (!File.Exists(_iniPath)) {
-                CreateAndWriteToFile(_iniPath, DevicesIniKey + "=A,B,C");
+                var defaultIni = DevicesIniKey + "=A,B,C" + Environment.NewLine + AlsoSetCommunicationsIniKey + "true";
+                CreateAndWriteToFile(_iniPath, defaultIni);
                 CreateAndWriteToFile(_logPath, string.Format("A {0} has been created for you, fill it with the playback devices you want to toggle between.\r\nPath to the .ini: {1}", IniFileName, _iniPath));
                 Environment.Exit(0);
             }
