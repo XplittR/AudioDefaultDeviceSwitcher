@@ -11,6 +11,7 @@ A simple program that toggles the default audio playback device on windows.
 
 # Setup
 Example Audio.ini:  
+
     Devices=Speakers,Realtek HD Audio 2nd output
     AlsoSetCommunications=true
 
