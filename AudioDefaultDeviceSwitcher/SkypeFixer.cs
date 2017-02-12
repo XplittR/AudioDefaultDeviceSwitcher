@@ -10,7 +10,7 @@ namespace AudioDefaultDeviceSwitcher {
             _skype = new Skype();
         }
 
-        public void Fix() {
+        public void SetAudioOut() {
             if (IsLoggedIn()) {
                 _skype.Settings.AudioOut = _device.FullName;
             }
