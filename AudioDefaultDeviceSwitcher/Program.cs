@@ -1,13 +1,14 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using AudioSwitcher.AudioApi;
 using AudioSwitcher.AudioApi.CoreAudio;
 
 namespace AudioDefaultDeviceSwitcher {
     public class Program {
-        public static void Main(string[] args) {
-            new Program().Run();
+        public static async Task Main(string[] args) {
+            await new Program().Run();
         }
         private const string IniFileName = "Audio.ini";
         private const string DevicesIniKey = "Devices";
@@ -16,40 +17,60 @@ namespace AudioDefaultDeviceSwitcher {
         private readonly string _iniPath = AppDomain.CurrentDomain.BaseDirectory + IniFileName;
         private readonly string _logPath = AppDomain.CurrentDomain.BaseDirectory + "Audio.log";
 
-        public void Run() {
+        public async Task Run() {
             Initialize();
-            var ini = new EasyIni(_iniPath);
-            var devicesStr = ini.Val(DevicesIniKey);
-            var devices = devicesStr.Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries);
-            if (devices.Length <= 1) {
-                CreateAndWriteToFile(_logPath, "Please enter more than one device-name.");
-                Environment.Exit(0);
-            }
-            var activePlayback = Controller.GetPlaybackDevices(DeviceState.Active);
-            var relevantDevicesArr = activePlayback.Where(o => devices.Contains(o.Name)).ToArray();
+            ReadIni();
+
+            var activePlayback = await Controller.GetPlaybackDevicesAsync(DeviceState.Active);
+            var relevantDevicesArr = activePlayback.Where(o => _devices.Contains(o.Name)).ToArray();
             if (relevantDevicesArr.Length <= 1) {
                 CreateAndWriteToFile(_logPath, "Could not find more than one device to togglet between. Did you type the names correct?");
                 Environment.Exit(0);
             }
             var currentDefaultDevice = relevantDevicesArr.FirstOrDefault(o => o.IsDefaultDevice);
             var currentIndex = Array.IndexOf(relevantDevicesArr, currentDefaultDevice);
-            var nextDevice = currentIndex == relevantDevicesArr.Length - 1
+            _nextDevice = currentIndex == relevantDevicesArr.Length - 1
                 ? relevantDevicesArr.First()
                 : relevantDevicesArr[currentIndex + 1];
 
-            nextDevice.SetAsDefault();
-            var alsoCommunications = ini.Val(AlsoSetCommunicationsIniKey, true);
-            if (alsoCommunications)
-                nextDevice.SetAsDefaultCommunications();
+            var defDeviceTask = SetDefaultDevice();
+            var defComDeviceTask = SetDefaultCommunicationsDevice();
+            var skypeFixTask = FixSkype();
 
-            var fixSkype = ini.Val(FixSkypeIniKey, false);
-            if (fixSkype) {
-                try {
-                    new SkypeFixer(nextDevice).SetAudioOut();
-                } catch (Exception ex) {
-                    CreateAndWriteToFile(_logPath, "Fixing skype failed. Exception: " + ex);
-                    Environment.Exit(0);
-                }
+            Task.WaitAll(defDeviceTask, defComDeviceTask, skypeFixTask);
+        }
+
+        private Task FixSkype() {
+            var fixSkype = _ini.Val(FixSkypeIniKey, false);
+            if (!fixSkype)
+                return Task.CompletedTask;
+            try {
+                new SkypeFixer(_nextDevice).SetAudioOut();
+            } catch (Exception ex) {
+                CreateAndWriteToFile(_logPath, "Fixing skype failed. Exception: " + ex);
+                Environment.Exit(0);
+            }
+            return Task.CompletedTask;
+        }
+
+        private async Task SetDefaultCommunicationsDevice() {
+            var alsoCommunications = _ini.Val(AlsoSetCommunicationsIniKey, true);
+            if (alsoCommunications) {
+                await _nextDevice.SetAsDefaultCommunicationsAsync();
+            }
+        }
+
+        private async Task SetDefaultDevice() {
+            await _nextDevice.SetAsDefaultAsync();
+        }
+
+        private void ReadIni() {
+            _ini = new EasyIni(_iniPath);
+            var devicesStr = _ini.Val(DevicesIniKey);
+            _devices = devicesStr.Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+            if (_devices.Length <= 1) {
+                CreateAndWriteToFile(_logPath, "Please enter more than one device-name.");
+                Environment.Exit(0);
             }
         }
 
@@ -71,5 +92,8 @@ namespace AudioDefaultDeviceSwitcher {
         }
 
         public CoreAudioController Controller = new CoreAudioController();
+        private EasyIni _ini;
+        private string[] _devices;
+        private CoreAudioDevice _nextDevice;
     }
 }

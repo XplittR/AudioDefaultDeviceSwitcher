@@ -7,7 +7,7 @@ namespace AudioDefaultDeviceSwitcher {
         private static Skype _skype;
         public SkypeFixer(CoreAudioDevice device) {
             _device = device;
-            _skype = new Skype();
+            _skype  = new Skype();
         }
 
         public void SetAudioOut() {
