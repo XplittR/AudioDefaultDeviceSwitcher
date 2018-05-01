@@ -4,6 +4,7 @@
     <TargetFrameworks>net472</TargetFrameworks>
     <LangVersion>latest</LangVersion>
     <AssemblyName>AudioDefaultDeviceSwitcher</AssemblyName>
+    <Platforms>x86</Platforms>
   </PropertyGroup>
   <ItemGroup>
     <COMReference Include="SKYPE4COMLib.dll">
@@ -13,6 +14,8 @@
       <WrapperTool>tlbimp</WrapperTool>
       <Lcid>0</Lcid>
       <Isolated>false</Isolated>
+      <EmbedInteropTypes>true</EmbedInteropTypes>
+      <Private>true</Private>
     </COMReference>
   </ItemGroup>
   <ItemGroup>
