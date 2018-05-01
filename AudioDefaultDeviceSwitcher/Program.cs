@@ -33,7 +33,7 @@ namespace AudioDefaultDeviceSwitcher {
             }
             var currentDefaultDevice = relevantDevicesArr.FirstOrDefault(o => o.IsDefaultDevice);
             var currentIndex = Array.IndexOf(relevantDevicesArr, currentDefaultDevice);
-            CoreAudioDevice nextDevice = currentIndex == relevantDevicesArr.Length - 1
+            var nextDevice = currentIndex == relevantDevicesArr.Length - 1
                 ? relevantDevicesArr.First()
                 : relevantDevicesArr[currentIndex + 1];
 
@@ -59,7 +59,7 @@ namespace AudioDefaultDeviceSwitcher {
                     + AlsoSetCommunicationsIniKey + "=true" + Environment.NewLine
                     + FixSkypeIniKey + "=false";
                 CreateAndWriteToFile(_iniPath, defaultIni);
-                CreateAndWriteToFile(_logPath, string.Format("A {0} has been created for you, fill it with the playback devices you want to toggle between.\r\nPath to the .ini: {1}", IniFileName, _iniPath));
+                CreateAndWriteToFile(_logPath, $"A {IniFileName} has been created for you, fill it with the playback devices you want to toggle between.\r\nPath to the .ini: {_iniPath}");
                 Environment.Exit(0);
             }
         }
