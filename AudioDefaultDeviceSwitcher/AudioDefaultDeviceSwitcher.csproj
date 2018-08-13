@@ -7,18 +7,6 @@
     <Platforms>x86</Platforms>
   </PropertyGroup>
   <ItemGroup>
-    <COMReference Include="SKYPE4COMLib.dll">
-      <Guid>03282b5d-b38f-469d-849a-09b0a7f4881b</Guid>
-      <VersionMajor>1</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <WrapperTool>tlbimp</WrapperTool>
-      <Lcid>0</Lcid>
-      <Isolated>false</Isolated>
-      <EmbedInteropTypes>true</EmbedInteropTypes>
-      <Private>true</Private>
-    </COMReference>
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="AudioSwitcher.AudioApi.CoreAudio" Version="3.0.0.1" />
     <PackageReference Include="Costura.Fody" Version="2.0.0" />
     <PackageReference Include="Fody" Version="3.0.3" />

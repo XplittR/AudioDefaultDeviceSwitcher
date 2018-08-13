@@ -35,22 +35,8 @@ namespace AudioDefaultDeviceSwitcher {
 
             var defDeviceTask = SetDefaultDevice();
             var defComDeviceTask = SetDefaultCommunicationsDevice();
-            var skypeFixTask = FixSkype();
 
-            Task.WaitAll(defDeviceTask, defComDeviceTask, skypeFixTask);
-        }
-
-        private Task FixSkype() {
-            var fixSkype = _ini.Val(FixSkypeIniKey, false);
-            if (!fixSkype)
-                return Task.CompletedTask;
-            try {
-                new SkypeFixer(_nextDevice).SetAudioOut();
-            } catch (Exception ex) {
-                CreateAndWriteToFile(_logPath, "Fixing skype failed. Exception: " + ex);
-                Environment.Exit(0);
-            }
-            return Task.CompletedTask;
+            Task.WaitAll(defDeviceTask, defComDeviceTask);
         }
 
         private async Task SetDefaultCommunicationsDevice() {
