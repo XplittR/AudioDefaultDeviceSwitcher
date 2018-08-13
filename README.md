@@ -8,15 +8,12 @@ A simple program that toggles the default audio playback device on windows.
 2. Run "AudioDefaultDeviceSwitcher.exe". A "Audio.ini" will be created in the same directory.  
 3. Edit the "Audio.ini" to your devices that you want to toggle between (Separate each name with a comma).  
 4. Run "AudioDefaultDeviceSwitcher.exe" every time you want to toggle between the devices.  
-  * If you set 'FixSkype' to 'true', you will get a prompt in your Skype the first time you run it, to allow modifying your Skype settings.
-
 
 # Setup
 Example Audio.ini:  
 
     Devices=Speakers,Realtek HD Audio 2nd output
     AlsoSetCommunications=true
-    FixSkype=true
 
 Corresponding Playback devices in Windows:  
 ![Devices](/DeviceImage.png?raw=true "Devices")
