@@ -13,7 +13,6 @@ namespace AudioDefaultDeviceSwitcher {
         private const string IniFileName = "Audio.ini";
         private const string DevicesIniKey = "Devices";
         private const string AlsoSetCommunicationsIniKey = "AlsoSetCommunications";
-        private const string FixSkypeIniKey = "FixSkype";
         private readonly string _iniPath = AppDomain.CurrentDomain.BaseDirectory + IniFileName;
         private readonly string _logPath = AppDomain.CurrentDomain.BaseDirectory + "Audio.log";
 
@@ -63,8 +62,7 @@ namespace AudioDefaultDeviceSwitcher {
         private void Initialize() {
             if (!File.Exists(_iniPath)) {
                 var defaultIni = DevicesIniKey + "=A,B,C" + Environment.NewLine
-                    + AlsoSetCommunicationsIniKey + "=true" + Environment.NewLine
-                    + FixSkypeIniKey + "=false";
+                    + AlsoSetCommunicationsIniKey + "=true";
                 CreateAndWriteToFile(_iniPath, defaultIni);
                 CreateAndWriteToFile(_logPath, $"A {IniFileName} has been created for you, fill it with the playback devices you want to toggle between.\r\nPath to the .ini: {_iniPath}");
                 Environment.Exit(0);
