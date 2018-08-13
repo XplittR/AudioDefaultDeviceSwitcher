@@ -4,7 +4,7 @@
     <TargetFrameworks>net472</TargetFrameworks>
     <LangVersion>latest</LangVersion>
     <AssemblyName>AudioDefaultDeviceSwitcher</AssemblyName>
-    <Platforms>x86</Platforms>
+    <Platforms>AnyCPU</Platforms>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="AudioSwitcher.AudioApi.CoreAudio" Version="3.0.0.1" />
